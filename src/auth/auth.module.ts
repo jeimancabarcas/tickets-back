@@ -5,9 +5,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
-const configService = new ConfigService();
+import { UserModule } from 'src/user/user.module';
+
 @Module({
   imports: [
+    UserModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -16,7 +18,7 @@ const configService = new ConfigService();
       secret: configService.getOrThrow<string>('JWT_SECRET'), // Cambia esto por una clave secreta segura
       signOptions: { expiresIn: '1h' }, // Opcional: configura la expiración del token
     }),
-  })
+  }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

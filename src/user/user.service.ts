@@ -25,4 +25,13 @@ async createUser(userData: UserDTO): Promise<User> {
   }
   
 }
+
+async findByUsername(username: string): Promise<User | null> {
+  try {
+    return await this.userModel.findOne({ username }).exec();
+  } catch (error: MongooseError | any) {
+    this.logger.error('Error finding user by username', error.message);
+    return null;
+  }
+}
 }
