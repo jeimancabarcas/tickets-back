@@ -15,10 +15,12 @@ import { UserModule } from 'src/user/user.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-      secret: configService.getOrThrow<string>('JWT_SECRET'), // Cambia esto por una clave secreta segura
-      signOptions: { expiresIn: '1h' }, // Opcional: configura la expiración del token
+        secret: configService.getOrThrow<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.getOrThrow<string>('JWT_ACCESS_EXPIRES'),
+        },
+      }),
     }),
-  }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
